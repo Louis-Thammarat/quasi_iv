@@ -96,34 +96,37 @@ The IV estimate for the effect of completed school years on consumption expendit
 
 *Which assumptions are necessary for the IV approach of task 2? First state the assumptions in general terms and then apply them to the specific example of this assignment. Discuss the validity of the assumptions and, to the extent possible, perform a formal test. What bias do you expect in your IV estimates and why?*
 
-To consider an instrumental variable as valid, it must fulfill three conditions: exclusion restriction, relevance and exogeneity. The first one implies that the selected instrument has no direct relation with the dependent variable of the research, and it influence is mediated by
-the instrumented variable -usually this is the most difficult condition to fulfill. The second condition is that the instrument must be relevant and should explain variation on the endogenous variable. This condition is usually revised with the significance of the first stage, regressing the independent variable with the instrument and other controls. The last condition states that the instrumental variable should be not correlated with the error.
+To consider an instrumental variable as valid, it must fulfill two conditions: exclusion restriction, relevance and exogeneity. The first one implies that the instrument affects the dependent variable (consumption expenditure) only through the endogenous explanatory variable (education) and must not be correlated with the error term in the outcome equation. The WASH program improves education (years of schooling), which in turn affects consumption expenditure, but it should not directly affect consumption expenditure, or influences consumption expenditure only through its effect on completed school years. This assumption is generally not directly testable. We rely on contextual and theoretical justification. For example, if the WASH program impacts consumption expenditure only by increasing completed school years, the assumption holds. If the program also affects health directly and health status also determines performance to seek incomes, it might violate this assumption. In addition, if the WASH program was not randomly assigned, it might be allocated based on factors that also affect consumption expenditure. For example, schools in wealthier areas might be more likely to receive the WASH program, and these areas might also have higher consumption expenditures due to higher incomes. Therefore, the validity of the exclusion restriction is weakened by this case.
+
+The second condition is that the instrument must be correlated with the endogenous explanatory variable (education in this case). Schools with the WASH program must have higher average completed school years compared to schools without the program. This condition is usually revised with the significance of the first stage, regressing the independent variable with the instrument and other controls. 
 
 ```{r IVtest}
-#summary(TSLS, diagnostic=T)
+summary(TSLS, diagnostic=T)
 ```
+According to the test results, the F-statistic for the weak instruments test is 1,715.06, which is much greater than 10, indicating that the instrument (WASH program) is strongly correlated with the endogenous variable (completed school years). This confirms the relevance of the instrument. The Wu-Hausman test compares the IV estimates to OLS estimates to check for endogeneity. The test statistic is 28.45 with a p-value of 9.64e-08, which is highly significant. This indicates that endogeneity is a concern, justifying the use of IV over OLS. The Sargan test is typically used to test the overidentifying restrictions when there are multiple instruments. Since there is only one instrument in this model, the Sargan test is not applicable.
 
-problem of endogei - wash services are in richest areas
+Given the high F-statistic in the weak instruments test, we expect little to no bias from weak instruments. The primary source of potential bias would come from a violation of the exclusion restriction, which we have to assume holds based on the context provided. If the WASH program affects consumption expenditure through channels other than education, it could bias the estimates. However, without evidence to the contrary, we proceed under the assumption that our IV estimates are unbiased.
 
 ## Question 5
 
 *Now assume that the WASH program was randomly assigned. Does this change your answer with respect to the validity of the IV assumptions? If yes, how?*
 
-destroys relevance, correrlation z and x dissapears 
+*The random assignment of the WASH program significantly strengthens the validity of the IV assumptions, particularly the exclusion restriction assumption. This makes the IV estimates more reliable and credible, as the primary concern about selection bias (more prevalance of WASH program in richer area) that induces potential correlation between the instrument and unobserved factors, is addressed by randomization. The relevance of the instrument is already well-supported by the data. The random assignment of the WASH program should still result in a significant effect on completed school years, as seen from the strong F-statistic in the weak instruments test (1,715.06). Therefore, the relevance assumption remains satisfied and unchanged.*
 
 ## Question 6
 
 *You know that sex and age of former students are important predictors of income, so you decide to control for them in your regressions. Repeat the regressions from task 1 and task 2 with these additional controls and interpret your results. Do your results change compared to before? Why?Why not?*
 
 ```{r,  results='asis'}
-# Here is the code we use in class to do that
-
-#TSLS_with_controls <- ivreg(loggdp~risk+asia + africa|logmort0 + asia + africa,data=ajr_2001) # important to add controls in first and second stage
+TSLS_with_controls <- ivreg(consexp~completed_school_years+sex + age|WASHprogram + sex + age,data=data)
+OLS_with_controls <- lm(consexp~completed_school_years + sex + age, data = data)
 
 # show results 
-#stargazer(ols_reg, TSLS, TSLS_with_controls, type="text")
+stargazer(ols_reg, TSLS, OLS_with_controls, TSLS_with_controls, type="text")
 ```
+*According to the results, the coefficient for completed school years remains positive and significant across all models. The magnitude of the effect slightly increases when controlling for sex and age in both the OLS and IV regressions. This suggests that part of the effect of education on consumption expenditure is slightly mediated through the factors of sex and age. Thus, these controls help isolate the effect of education by holding constant other factors that influence consumption expenditure.
 
+Moreover, The R square and Adjusted R square values increase when adding controls, indicating that the model with controls explains a larger proportion of the variance in consumption expenditure. Also, the standard errors slightly decreases slightly for the estimates in the model with controls, suggesting an improvement in the model's precision. This means that adding controls for sex and age provides a more precise estimate of the effect of education on consumption expenditure, and the robustness of the results across different specifications supports the validity of the findings.*
 
 # Part 2
 
