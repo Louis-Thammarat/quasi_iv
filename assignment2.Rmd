@@ -72,9 +72,8 @@ stargazer(ols_reg,
 
 ```
 
-one extra year of education may imply an increase of xxxxx -> we can compare it with the original distribution of the variable, for example with the mean and the sd
-ommited variable: family income, overestimate the effect 
-measurment error x is problematic systematic error coudl generate endor
+The result indicates that for each additional year of schooling, consumption expenditure is expected to increase by 31,747.580 units, holding other factors constant and it is statistically significant at 1%. (-> we can compare it with the original distribution of the variable, for example with the mean and the sd) 
+The OLS regression approach is unlikely to give an unbiased estimate of the causal effect due to two potential endogeneity issues. Firstly, this model omits socioeconomic status of families, such as family income. Higher familiy income might provide better educational opportunities and also have higher consumption expenditures (indicating higher income) independently of education. The bias as a result of the omited variable would be positive. This means the OLS estimate of the effect of education on consumption expenditure would be inflated. Secondly, innaccurate reporting of years of schooling can bias the estimates. This may occur when individuals incorrectly remember the exact number of years they attended school or even might intentionally misreport their years of schooling to appear more educated. The estimated coefficient on schooling years would be biased toward zero, underestimating the true effect of education on consumption expenditure.
 
 ## Question 2
 
