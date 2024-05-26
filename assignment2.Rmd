@@ -72,8 +72,8 @@ stargazer(ols_reg,
 
 ```
 
-The result indicates that for each additional year of schooling, consumption expenditure is expected to increase by 31,747.580 units, holding other factors constant and it is statistically significant at 1%. (-> we can compare it with the original distribution of the variable, for example with the mean and the sd) 
-The OLS regression approach is unlikely to give an unbiased estimate of the causal effect due to two potential endogeneity issues. Firstly, this model omits socioeconomic status of families, such as family income. Higher familiy income might provide better educational opportunities and also have higher consumption expenditures (indicating higher income) independently of education. The bias as a result of the omited variable would be positive. This means the OLS estimate of the effect of education on consumption expenditure would be inflated. Secondly, innaccurate reporting of years of schooling can bias the estimates. This may occur when individuals incorrectly remember the exact number of years they attended school or even might intentionally misreport their years of schooling to appear more educated. The estimated coefficient on schooling years would be biased toward zero, underestimating the true effect of education on consumption expenditure.
+*The result indicates that for each additional year of schooling, consumption expenditure is expected to increase by 31,747.580 units, holding other factors constant and it is statistically significant at 1%. (-> we can compare it with the original distribution of the variable, for example with the mean and the sd) 
+The OLS regression approach is unlikely to give an unbiased estimate of the causal effect due to two potential endogeneity issues. Firstly, this model omits socioeconomic status of families, such as family income. Higher familiy income might provide better educational opportunities and also have higher consumption expenditures (indicating higher income) independently of education. The bias as a result of the omited variable would be positive. This means the OLS estimate of the effect of education on consumption expenditure would be inflated. Secondly, innaccurate reporting of years of schooling can bias the estimates. This may occur when individuals incorrectly remember the exact number of years they attended school or even might intentionally misreport their years of schooling to appear more educated. The estimated coefficient on schooling years would be biased toward zero, underestimating the true effect of education on consumption expenditure.*
 
 ## Question 2
 
@@ -81,23 +81,16 @@ The OLS regression approach is unlikely to give an unbiased estimate of the caus
 
 ```{r IV, results='asis'}
 
-# Here is the code we use in class to do that
-
-#TSLS <- ivreg (Y~X|Z) # Use a dedicated command from the AER package to run IV. 
-# TSLS<-ivreg(loggdp~risk|logmort0,data=ajr_2001)
-#summary(TSLS)
-#stargazer(ols_reg, f_stage,  s_stage, TSLS, column.labels=c("Base OLS","First Stage", "Second Stage", "TSLS"), type="text")
-
-
-
+TSLS <- ivreg(consexp~completed_school_years|WASHprogram, data = data)
+stargazer(TSLS, type="text")
 ```
-
+The IV estimate for the effect of completed school years on consumption expenditure is 21,356.170. This suggests that each additional year of schooling increases consumption expenditure by approximately 21,356.170 units with 1% level of significant. The use of the WASH program as an instrument allows us to interpret the estimated effect as causal, assuming the instrument is valid.
 
 ## Question 3
 
 *Which treatment effect are you estimating in this setting and why?*
 
-ATE because we assume treatment effect is homogeg
+*Given the assumption of homogeneous treatment effects in the study setting, the instrumental variable regression estimates the Average Treatment Effect (ATE). This is because, under the homogeneity assumption, the effect of an additional year of schooling on consumption expenditure is constant across all individuals. Therefore, the causal effect estimated from the IV regression using the WASH program as an instrument reflects the average effect of education on consumption expenditure for the entire population.*
 
 ## Question 4
 
